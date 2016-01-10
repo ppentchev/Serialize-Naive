@@ -92,3 +92,113 @@ method serialize(Sub :$warn)
 {
 	return do-serialize self, self.WHAT, :warn($warn);
 }
+
+=begin pod
+
+=head1 NAME
+
+Serialize::Naive - recursive serialization and deserialization interface
+
+=head1 SYNOPSIS
+
+    use Serialize::Naive;
+
+    class Point does Serialize::Naive
+    {
+        has Rat $.x;
+        has Rat $.y;
+    }
+
+    class Circle does Serialize::Naive
+    {
+        has Point $.center;
+        has Int $.radius;
+    }
+
+    class Polygon does Serialize::Naive
+    {
+        has Str $.label;
+        has Array[Point] $.vertices;
+    }
+
+    my %data = radius => 5, center => { x => 0.5, y => 1.5 };
+    my Circle $c .= deserialize(%data);
+
+    my %coords = $c.center.serialize;
+    say "X %coords<x> Y %coords<y>";
+
+    my Polygon $sq .= new(:label("A. Square"),
+        :vertices(Array[Point].new(
+            Point.new(:x(0.0), :y(0.0)),
+            Point.new(:x(1.0), :y(0.0)),
+            Point.new(:x(1.0), :y(1.0)),
+            Point.new(:x(0.0), :y(1.0)),
+    )));
+    %data = $sq.serialize;
+    say %data;
+
+    %data<weird> = 'ness';
+    %data<vertices>[1]<unhand> = 'me';
+
+    say 'Warnings silently ignored';
+    $sq .= deserialize(%data);
+
+    say 'Warnings displayed';
+    $sq .= deserialize(%data, :warn(&note));
+
+=head1 DESCRIPTION
+
+This role provides two methods to recursively serialize Perl 6 objects to
+Perl 6 data structures and, later, deserialize them back.  No attempt is
+made to preserve type information in the serialized data; the caller of
+the C<deserialize()> method should take care to pass the proper data
+structure for the top-level class, and the inner objects and classes will
+be discovered and recursed into automatically.
+
+=head1 METHODS
+
+=head2 method serialize
+
+    method serialize()
+
+Return a hash containing key/value pairs for all the public attributes of
+the object's class.  Attributes are classified in several categories:
+
+=item1 Basic types
+
+The value of the attribute is stored directly as the hash pair value.
+
+=item1 Typed arrays or hashes
+
+The value of the attribute is stored as respectively an array or a hash
+containing the recursively serialized values of the elements.
+
+=item1 Other classes
+
+The value of the attribute is recursively serialized to a hash using
+the same algorithm.
+
+=head2 method deserialize
+
+    method deserialize(%data, Sub :$warn);
+
+Instantiate a new object of the invocant's type, initializing its
+attributes with the values from the provided hash.  Any attributes of
+composite or complex types are handled recursively in the reverse manner
+as the serialization described above.
+
+The optional C<$warn> parameter is a handler for warnings about any
+inconsistencies detected in the data.  For the present, the only problem
+detected is hash keys that do not correspond to class attributes.
+
+=head1 SEE ALSO
+
+L<Serialize::Tiny>
+
+=head1 LICENSE
+
+The Serialize::Naive module is distributed under the terms of
+the Artistic License 2.0.  For more details, see the full text of
+the license in the file LICENSE in the source distribution.
+
+=end pod
