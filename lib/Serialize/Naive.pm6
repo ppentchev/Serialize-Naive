@@ -69,6 +69,11 @@ method deserialize(%data, Sub :$warn)
 	return do-deserialize %data, self.WHAT, :warn($warn);
 }
 
+sub deserialize($type, %data, Sub :$warn) is export
+{
+	return do-deserialize %data, $type, :warn($warn);
+}
+
 sub do-serialize($obj, $type, Sub :$warn)
 {
 	my %build;
@@ -91,6 +96,11 @@ sub do-serialize($obj, $type, Sub :$warn)
 method serialize(Sub :$warn)
 {
 	return do-serialize self, self.WHAT, :warn($warn);
+}
+
+sub serialize($obj, Sub :$warn) is export
+{
+	return do-serialize $obj, $obj.WHAT, :warn($warn);
 }
 
 =begin pod
@@ -190,6 +200,23 @@ as the serialization described above.
 The optional C<$warn> parameter is a handler for warnings about any
 inconsistencies detected in the data.  For the present, the only problem
 detected is hash keys that do not correspond to class attributes.
+
+=head1 FUNCTIONS
+
+The C<Serialize::Naive> module also exports two functions:
+
+=item1 sub serialize
+
+    sub serialize($obj)
+
+Serialize the specified object just as C<$obj.serialize()> would.
+
+=item1 sub deserialize
+
+    sub deserialize($type, %data, Sub :$warn)
+
+Deserialize an object of the specified type just as
+C<$type.deserialize(%data, :warn($warn))> would.
 
 =head1 SEE ALSO
 

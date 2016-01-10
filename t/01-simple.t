@@ -6,7 +6,7 @@ use strict;
 use Serialize::Naive;
 use Test;
 
-plan 8;
+plan 11;
 
 class Point does Serialize::Naive
 {
@@ -14,10 +14,20 @@ class Point does Serialize::Naive
 	has Int $.y;
 }
 
+multi sub infix:<==>(Point:D $p1, Point:D $p2)
+{
+	return $p1.x == $p2.x && $p1.y == $p2.y;
+}
+
 class Circle does Serialize::Naive
 {
 	has Point $.center;
 	has Rat $.radius;
+}
+
+multi sub infix:<==>(Circle:D $c1, Circle:D $c2)
+{
+	return $c1.radius == $c2.radius && $c1.center == $c2.center;
 }
 
 class Triangle does Serialize::Naive
@@ -40,6 +50,9 @@ class Triangle does Serialize::Naive
 	is $c.center.x, 1, 'trivial - center - x';
 	is $c.center.y, 2, 'trivial - center - y';
 
+	my Circle:D $c-f = deserialize Circle, %data;
+	ok $c-f == $c, 'trivial - function vs method';
+
 	my %tridata = label => 'Soldier Y', unhand => 'me', vertices => [
 		{x => 0, y => 0},
 		{x => 1},
@@ -55,9 +68,13 @@ class Triangle does Serialize::Naive
 
 	my %newdata = $c.serialize;
 	is-deeply %newdata, %data, 'trivial - serialize back';
+	my %newdata-f = serialize $c;
+	is-deeply %newdata-f, %data, 'trivial - serialize using a function';
 
 	my %newtridata = $tri.serialize;
 	%tridata<unhand>:delete;
 	%tridata<vertices>[2]<weird>:delete;
 	is-deeply %newtridata, %tridata, 'triangle - serialize back';
+	my %newtridata-f = serialize $tri;
+	is-deeply %newtridata-f, %tridata, 'triangle - serialize using a function';
 }
