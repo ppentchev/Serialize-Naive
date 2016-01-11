@@ -167,28 +167,37 @@ be discovered and recursed into automatically.
 
 =head1 METHODS
 
-=head2 method serialize
+=begin item1
+method serialize
 
     method serialize()
 
 Return a hash containing key/value pairs for all the public attributes of
 the object's class.  Attributes are classified in several categories:
 
-=item1 Basic types
+=begin item2
+Basic types
 
 The value of the attribute is stored directly as the hash pair value.
+=end item2
 
-=item1 Typed arrays or hashes
+=begin item2
+Typed arrays or hashes
 
 The value of the attribute is stored as respectively an array or a hash
 containing the recursively serialized values of the elements.
+=end item2
 
-=item1 Other classes
+=begin item2
+Other classes
 
 The value of the attribute is recursively serialized to a hash using
 the same algorithm.
+=end item2
+=end item1
 
-=head2 method deserialize
+=begin item1
+method deserialize
 
     method deserialize(%data, Sub :$warn);
 
@@ -200,27 +209,34 @@ as the serialization described above.
 The optional C<$warn> parameter is a handler for warnings about any
 inconsistencies detected in the data.  For the present, the only problem
 detected is hash keys that do not correspond to class attributes.
+=end item1
 
 =head1 FUNCTIONS
 
 The C<Serialize::Naive> module also exports two functions:
 
-=item1 sub serialize
+=begin item1
+sub serialize
 
     sub serialize($obj)
 
 Serialize the specified object just as C<$obj.serialize()> would.
 
-=item1 sub deserialize
+=end item1
+
+=begin item1
+sub deserialize
 
     sub deserialize($type, %data, Sub :$warn)
 
 Deserialize an object of the specified type just as
 C<$type.deserialize(%data, :warn($warn))> would.
 
+=end item1
+
 =head1 SEE ALSO
 
-L<Serialize::Tiny>
+L<Serialize::Tiny|https://modules.perl6.org/dist/Serialize::Tiny>
 
 =head1 LICENSE
 
