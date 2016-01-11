@@ -236,6 +236,24 @@ C<$type.deserialize(%data, :warn($warn))> would.
 
 =end item1
 
+=head1 BUGS
+
+The reason the regular expressions matching attribute names expect them to
+start with "$!" is that for some reason I can't get deserialization to work
+right with actual C<Positional> and C<Associative> attributes; even after
+changing the regular expressions, this won't work:
+
+=begin code
+    class Label does Serialize::Naive {
+        has Str @.lines;
+    }
+
+    my $label = Label.deserialize({ :lines(['first', 'second']) });
+=end code
+
+I've tried several magic incantations in C<do-deserialize()> and I can't seem
+to be able to figure it out, hence the C<Array[Point]> in the examples.
+
 =head1 SEE ALSO
 
 L<Serialize::Tiny|https://modules.perl6.org/dist/Serialize::Tiny>
