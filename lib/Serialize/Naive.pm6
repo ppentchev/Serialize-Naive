@@ -238,6 +238,14 @@ C<$type.deserialize(%data, :warn($warn))> would.
 
 L<Serialize::Tiny|https://modules.perl6.org/dist/Serialize::Tiny>
 
+=head1 AUTHOR
+
+Peter Pentchev <L<roam@ringlet.net|mailto:roam@ringlet.net>>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2016  Peter Pentchev
+
 =head1 LICENSE
 
 The Serialize::Naive module is distributed under the terms of
