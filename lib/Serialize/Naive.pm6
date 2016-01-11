@@ -111,6 +111,7 @@ Serialize::Naive - recursive serialization and deserialization interface
 
 =head1 SYNOPSIS
 
+=begin code
     use Serialize::Naive;
 
     class Point does Serialize::Naive
@@ -155,6 +156,7 @@ Serialize::Naive - recursive serialization and deserialization interface
 
     say 'Warnings displayed';
     $sq .= deserialize(%data, :warn(&note));
+=end code
 
 =head1 DESCRIPTION
 
