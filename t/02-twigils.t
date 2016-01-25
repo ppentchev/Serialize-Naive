@@ -6,7 +6,7 @@ use strict;
 use Serialize::Naive;
 use Test;
 
-plan 11;
+plan 15;
 
 class Point does Serialize::Naive
 {
@@ -41,6 +41,18 @@ class Triangle does Serialize::Naive
 	}
 }
 
+class Drawing does Serialize::Naive
+{
+	has Str $.label;
+	has Point %.points;
+
+	method is-valid() returns Bool:D
+	{
+		return $!label.defined &&
+		    not %!points.grep: not *.defined;
+	}
+}
+
 {
 	my %data = center => {x => 1, y => 2}, radius => 1.5;
 
@@ -65,6 +77,16 @@ class Triangle does Serialize::Naive
 	nok $tri.vertices[1].y.defined, 'triangle - an undefined value';
 	is $warnings, 2, 'triangle - unhandled value warnings';
 
+	my %drdata = label => 'My first drawing', points => {
+		origin => { x => 0, y => 0 },
+		right => { x => 1, y => 0 },
+		up => { x => 1, y => 1 },
+		way-out-there => { x => 42, y => 37 },
+	};
+	my Drawing:D $dr = Drawing.deserialize(%drdata);
+	ok $dr.is-valid, 'drawing - valid';
+	ok $dr.points<way-out-there>.x == %drdata<points><way-out-there><x>;
+
 	my %newdata = $c.serialize;
 	is-deeply %newdata, %data, 'trivial - serialize back';
 	my %newdata-f = serialize $c;
@@ -76,4 +98,9 @@ class Triangle does Serialize::Naive
 	is-deeply %newtridata, %tridata, 'triangle - serialize back';
 	my %newtridata-f = serialize $tri;
 	is-deeply %newtridata-f, %tridata, 'triangle - serialize using a function';
+
+	my %newdrdata = $dr.serialize;
+	is-deeply %newdrdata, %drdata, 'drawing - serialize back';
+	my %newdrdata-f = serialize $dr;
+	is-deeply %newdrdata-f, %drdata, 'drawing - serialize using a function';
 }
