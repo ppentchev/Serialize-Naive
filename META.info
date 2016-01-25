@@ -1,6 +1,6 @@
 {
   "perl": "6.*",
-  "name": "Serialize-Naive",
+  "name": "Serialize::Naive",
   "version": "0.2.0",
   "description": "A somewhat naive (de-)serialization implementation",
   "authors": [ "Peter Pentchev" ],
