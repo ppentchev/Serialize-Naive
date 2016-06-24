@@ -206,6 +206,8 @@ Other classes
 The value of the attribute is recursively serialized to a hash using
 the same algorithm.
 =end item2
+
+Current API available since version 0.1.0.
 =end item1
 
 =begin item1
@@ -221,6 +223,8 @@ as the serialization described above.
 The optional C<$warn> parameter is a handler for warnings about any
 inconsistencies detected in the data.  For the present, the only problem
 detected is hash keys that do not correspond to class attributes.
+
+Current API available since version 0.1.0.
 =end item1
 
 =head1 FUNCTIONS
@@ -234,6 +238,7 @@ sub serialize
 
 Serialize the specified object just as C<$obj.serialize()> would.
 
+Current API available since version 0.1.0.
 =end item1
 
 =begin item1
@@ -244,6 +249,7 @@ sub deserialize
 Deserialize an object of the specified type just as
 C<$type.deserialize(%data, :warn($warn))> would.
 
+Current API available since version 0.1.0.
 =end item1
 
 =head1 SEE ALSO
