@@ -1,5 +1,5 @@
 {
-  "perl": "6.*",
+  "perl": "6.c",
   "name": "Serialize::Naive",
   "version": "0.2.3",
   "description": "A somewhat naive (de-)serialization implementation",
