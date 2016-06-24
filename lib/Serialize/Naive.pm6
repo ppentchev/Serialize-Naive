@@ -3,16 +3,23 @@ unit role Serialize::Naive:ver<0.2.2>:auth<github:ppentchev>;
 use v6.c;
 use strict;
 
-my $serialize-basic-types = (Str, Str:D, Bool, Bool:D,
-    Int, Int:D, UInt, UInt:D, Rat, Rat:D, Any, Any:D);
+sub get-type-name($type)
+{
+	($type.HOW ~~ Metamodel::DefiniteHOW) ??
+	    $type.^base_type.^name !!
+	    $type.^name;
+}
+
+sub is-core($type)
+{
+	so CORE::{get-type-name $type}:k;
+}
 
 sub walk-type($type, $value, Sub :$objfunc, :$array-type, :$hash-type, Sub :$warn)
 {
-	for $serialize-basic-types.values -> $basic {
-		next unless $basic === $type;
-
+	if is-core $type {
 		# Ah, weirdness...
-		if $type === Rat || $type === Rat:D {
+		if get-type-name($type) eq 'Rat' {
 			return $value.Rat;
 		} else {
 			return $value;
