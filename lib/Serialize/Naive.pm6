@@ -1,4 +1,4 @@
-unit role Serialize::Naive:ver<0.2.4>:auth<github:ppentchev>;
+unit role Serialize::Naive:ver<0.2.5.dev1>:auth<github:ppentchev>;
 
 use v6.c;
 
