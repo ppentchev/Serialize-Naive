@@ -1,6 +1,6 @@
 use v6.c;
 
-unit role Serialize::Naive:ver<0.2.5>:auth<github:ppentchev>;
+unit role Serialize::Naive:ver<0.2.6>:auth<github:ppentchev>;
 
 sub get-type-name($type)
 {
